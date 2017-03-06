@@ -41,9 +41,9 @@ def p_factor_param(p):
     'factor : LPAREN expression RPAREN'
     p[0] = "\\left( " + p[2] + " \\right)"
 
-def p_factor_blacket(p):
-    'factor : LBRACKET expression RBRACKET'
-    p[0] = "\\left[ " + p[2] + " \\right]"
+def p_factor_array(p):
+    'factor : VARIABLE LBRACKET expression RBRACKET'
+    p[0] = p[1] + " \\left[ " + p[3] + " \\right]"
 
 # Error rule for syntax errors
 def p_error(p):
