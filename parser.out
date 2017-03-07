@@ -6,8 +6,8 @@ Rule 0     S' -> expression
 Rule 1     expression -> expression PLUS term
 Rule 2     expression -> expression MINUS term
 Rule 3     expression -> term
-Rule 4     term -> term TIMES factor
-Rule 5     term -> term DIVIDE factor
+Rule 4     term -> term DIVIDE factor
+Rule 5     term -> term TIMES factor
 Rule 6     term -> factor
 Rule 7     factor -> NUMBER
 Rule 8     factor -> VARIABLE
@@ -16,7 +16,7 @@ Rule 10    factor -> VARIABLE LBRACKET expression RBRACKET
 
 Terminals, with rules where they appear
 
-DIVIDE               : 5
+DIVIDE               : 4
 LBRACKET             : 10
 LPAREN               : 9
 MINUS                : 2
@@ -24,7 +24,7 @@ NUMBER               : 7
 PLUS                 : 1
 RBRACKET             : 10
 RPAREN               : 9
-TIMES                : 4
+TIMES                : 5
 VARIABLE             : 8 10
 error                : 
 
@@ -42,8 +42,8 @@ state 0
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
-    (4) term -> . term TIMES factor
-    (5) term -> . term DIVIDE factor
+    (4) term -> . term DIVIDE factor
+    (5) term -> . term TIMES factor
     (6) term -> . factor
     (7) factor -> . NUMBER
     (8) factor -> . VARIABLE
@@ -51,12 +51,12 @@ state 0
     (10) factor -> . VARIABLE LBRACKET expression RBRACKET
 
     NUMBER          shift and go to state 5
-    VARIABLE        shift and go to state 4
+    VARIABLE        shift and go to state 2
     LPAREN          shift and go to state 1
 
-    factor                         shift and go to state 2
-    expression                     shift and go to state 3
+    factor                         shift and go to state 4
     term                           shift and go to state 6
+    expression                     shift and go to state 3
 
 state 1
 
@@ -64,8 +64,8 @@ state 1
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
-    (4) term -> . term TIMES factor
-    (5) term -> . term DIVIDE factor
+    (4) term -> . term DIVIDE factor
+    (5) term -> . term TIMES factor
     (6) term -> . factor
     (7) factor -> . NUMBER
     (8) factor -> . VARIABLE
@@ -73,24 +73,26 @@ state 1
     (10) factor -> . VARIABLE LBRACKET expression RBRACKET
 
     NUMBER          shift and go to state 5
-    VARIABLE        shift and go to state 4
+    VARIABLE        shift and go to state 2
     LPAREN          shift and go to state 1
 
-    factor                         shift and go to state 2
-    expression                     shift and go to state 7
+    factor                         shift and go to state 4
     term                           shift and go to state 6
+    expression                     shift and go to state 7
 
 state 2
 
-    (6) term -> factor .
+    (8) factor -> VARIABLE .
+    (10) factor -> VARIABLE . LBRACKET expression RBRACKET
 
-    TIMES           reduce using rule 6 (term -> factor .)
-    DIVIDE          reduce using rule 6 (term -> factor .)
-    RBRACKET        reduce using rule 6 (term -> factor .)
-    PLUS            reduce using rule 6 (term -> factor .)
-    MINUS           reduce using rule 6 (term -> factor .)
-    $end            reduce using rule 6 (term -> factor .)
-    RPAREN          reduce using rule 6 (term -> factor .)
+    DIVIDE          reduce using rule 8 (factor -> VARIABLE .)
+    TIMES           reduce using rule 8 (factor -> VARIABLE .)
+    PLUS            reduce using rule 8 (factor -> VARIABLE .)
+    MINUS           reduce using rule 8 (factor -> VARIABLE .)
+    $end            reduce using rule 8 (factor -> VARIABLE .)
+    RPAREN          reduce using rule 8 (factor -> VARIABLE .)
+    RBRACKET        reduce using rule 8 (factor -> VARIABLE .)
+    LBRACKET        shift and go to state 8
 
 
 state 3
@@ -99,31 +101,29 @@ state 3
     (1) expression -> expression . PLUS term
     (2) expression -> expression . MINUS term
 
-    PLUS            shift and go to state 8
+    PLUS            shift and go to state 10
     MINUS           shift and go to state 9
 
 
 state 4
 
-    (8) factor -> VARIABLE .
-    (10) factor -> VARIABLE . LBRACKET expression RBRACKET
+    (6) term -> factor .
 
-    TIMES           reduce using rule 8 (factor -> VARIABLE .)
-    DIVIDE          reduce using rule 8 (factor -> VARIABLE .)
-    PLUS            reduce using rule 8 (factor -> VARIABLE .)
-    MINUS           reduce using rule 8 (factor -> VARIABLE .)
-    $end            reduce using rule 8 (factor -> VARIABLE .)
-    RPAREN          reduce using rule 8 (factor -> VARIABLE .)
-    RBRACKET        reduce using rule 8 (factor -> VARIABLE .)
-    LBRACKET        shift and go to state 10
+    DIVIDE          reduce using rule 6 (term -> factor .)
+    TIMES           reduce using rule 6 (term -> factor .)
+    PLUS            reduce using rule 6 (term -> factor .)
+    MINUS           reduce using rule 6 (term -> factor .)
+    $end            reduce using rule 6 (term -> factor .)
+    RPAREN          reduce using rule 6 (term -> factor .)
+    RBRACKET        reduce using rule 6 (term -> factor .)
 
 
 state 5
 
     (7) factor -> NUMBER .
 
-    TIMES           reduce using rule 7 (factor -> NUMBER .)
     DIVIDE          reduce using rule 7 (factor -> NUMBER .)
+    TIMES           reduce using rule 7 (factor -> NUMBER .)
     PLUS            reduce using rule 7 (factor -> NUMBER .)
     MINUS           reduce using rule 7 (factor -> NUMBER .)
     $end            reduce using rule 7 (factor -> NUMBER .)
@@ -134,16 +134,16 @@ state 5
 state 6
 
     (3) expression -> term .
-    (4) term -> term . TIMES factor
-    (5) term -> term . DIVIDE factor
+    (4) term -> term . DIVIDE factor
+    (5) term -> term . TIMES factor
 
     PLUS            reduce using rule 3 (expression -> term .)
     MINUS           reduce using rule 3 (expression -> term .)
     $end            reduce using rule 3 (expression -> term .)
-    RPAREN          reduce using rule 3 (expression -> term .)
     RBRACKET        reduce using rule 3 (expression -> term .)
-    TIMES           shift and go to state 12
-    DIVIDE          shift and go to state 11
+    RPAREN          reduce using rule 3 (expression -> term .)
+    DIVIDE          shift and go to state 12
+    TIMES           shift and go to state 11
 
 
 state 7
@@ -153,54 +153,18 @@ state 7
     (2) expression -> expression . MINUS term
 
     RPAREN          shift and go to state 13
-    PLUS            shift and go to state 8
+    PLUS            shift and go to state 10
     MINUS           shift and go to state 9
 
 
 state 8
 
-    (1) expression -> expression PLUS . term
-    (4) term -> . term TIMES factor
-    (5) term -> . term DIVIDE factor
-    (6) term -> . factor
-    (7) factor -> . NUMBER
-    (8) factor -> . VARIABLE
-    (9) factor -> . LPAREN expression RPAREN
-    (10) factor -> . VARIABLE LBRACKET expression RBRACKET
-
-    NUMBER          shift and go to state 5
-    VARIABLE        shift and go to state 4
-    LPAREN          shift and go to state 1
-
-    factor                         shift and go to state 2
-    term                           shift and go to state 14
-
-state 9
-
-    (2) expression -> expression MINUS . term
-    (4) term -> . term TIMES factor
-    (5) term -> . term DIVIDE factor
-    (6) term -> . factor
-    (7) factor -> . NUMBER
-    (8) factor -> . VARIABLE
-    (9) factor -> . LPAREN expression RPAREN
-    (10) factor -> . VARIABLE LBRACKET expression RBRACKET
-
-    NUMBER          shift and go to state 5
-    VARIABLE        shift and go to state 4
-    LPAREN          shift and go to state 1
-
-    factor                         shift and go to state 2
-    term                           shift and go to state 15
-
-state 10
-
     (10) factor -> VARIABLE LBRACKET . expression RBRACKET
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
-    (4) term -> . term TIMES factor
-    (5) term -> . term DIVIDE factor
+    (4) term -> . term DIVIDE factor
+    (5) term -> . term TIMES factor
     (6) term -> . factor
     (7) factor -> . NUMBER
     (8) factor -> . VARIABLE
@@ -208,37 +172,73 @@ state 10
     (10) factor -> . VARIABLE LBRACKET expression RBRACKET
 
     NUMBER          shift and go to state 5
-    VARIABLE        shift and go to state 4
+    VARIABLE        shift and go to state 2
     LPAREN          shift and go to state 1
 
-    factor                         shift and go to state 2
-    expression                     shift and go to state 16
+    factor                         shift and go to state 4
     term                           shift and go to state 6
+    expression                     shift and go to state 14
 
-state 11
+state 9
 
-    (5) term -> term DIVIDE . factor
+    (2) expression -> expression MINUS . term
+    (4) term -> . term DIVIDE factor
+    (5) term -> . term TIMES factor
+    (6) term -> . factor
     (7) factor -> . NUMBER
     (8) factor -> . VARIABLE
     (9) factor -> . LPAREN expression RPAREN
     (10) factor -> . VARIABLE LBRACKET expression RBRACKET
 
     NUMBER          shift and go to state 5
-    VARIABLE        shift and go to state 4
+    VARIABLE        shift and go to state 2
+    LPAREN          shift and go to state 1
+
+    factor                         shift and go to state 4
+    term                           shift and go to state 15
+
+state 10
+
+    (1) expression -> expression PLUS . term
+    (4) term -> . term DIVIDE factor
+    (5) term -> . term TIMES factor
+    (6) term -> . factor
+    (7) factor -> . NUMBER
+    (8) factor -> . VARIABLE
+    (9) factor -> . LPAREN expression RPAREN
+    (10) factor -> . VARIABLE LBRACKET expression RBRACKET
+
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 2
+    LPAREN          shift and go to state 1
+
+    factor                         shift and go to state 4
+    term                           shift and go to state 16
+
+state 11
+
+    (5) term -> term TIMES . factor
+    (7) factor -> . NUMBER
+    (8) factor -> . VARIABLE
+    (9) factor -> . LPAREN expression RPAREN
+    (10) factor -> . VARIABLE LBRACKET expression RBRACKET
+
+    NUMBER          shift and go to state 5
+    VARIABLE        shift and go to state 2
     LPAREN          shift and go to state 1
 
     factor                         shift and go to state 17
 
 state 12
 
-    (4) term -> term TIMES . factor
+    (4) term -> term DIVIDE . factor
     (7) factor -> . NUMBER
     (8) factor -> . VARIABLE
     (9) factor -> . LPAREN expression RPAREN
     (10) factor -> . VARIABLE LBRACKET expression RBRACKET
 
     NUMBER          shift and go to state 5
-    VARIABLE        shift and go to state 4
+    VARIABLE        shift and go to state 2
     LPAREN          shift and go to state 1
 
     factor                         shift and go to state 18
@@ -247,8 +247,8 @@ state 13
 
     (9) factor -> LPAREN expression RPAREN .
 
-    TIMES           reduce using rule 9 (factor -> LPAREN expression RPAREN .)
     DIVIDE          reduce using rule 9 (factor -> LPAREN expression RPAREN .)
+    TIMES           reduce using rule 9 (factor -> LPAREN expression RPAREN .)
     PLUS            reduce using rule 9 (factor -> LPAREN expression RPAREN .)
     MINUS           reduce using rule 9 (factor -> LPAREN expression RPAREN .)
     $end            reduce using rule 9 (factor -> LPAREN expression RPAREN .)
@@ -258,77 +258,77 @@ state 13
 
 state 14
 
-    (1) expression -> expression PLUS term .
-    (4) term -> term . TIMES factor
-    (5) term -> term . DIVIDE factor
-
-    PLUS            reduce using rule 1 (expression -> expression PLUS term .)
-    MINUS           reduce using rule 1 (expression -> expression PLUS term .)
-    $end            reduce using rule 1 (expression -> expression PLUS term .)
-    RPAREN          reduce using rule 1 (expression -> expression PLUS term .)
-    RBRACKET        reduce using rule 1 (expression -> expression PLUS term .)
-    TIMES           shift and go to state 12
-    DIVIDE          shift and go to state 11
-
-
-state 15
-
-    (2) expression -> expression MINUS term .
-    (4) term -> term . TIMES factor
-    (5) term -> term . DIVIDE factor
-
-    PLUS            reduce using rule 2 (expression -> expression MINUS term .)
-    MINUS           reduce using rule 2 (expression -> expression MINUS term .)
-    $end            reduce using rule 2 (expression -> expression MINUS term .)
-    RPAREN          reduce using rule 2 (expression -> expression MINUS term .)
-    RBRACKET        reduce using rule 2 (expression -> expression MINUS term .)
-    TIMES           shift and go to state 12
-    DIVIDE          shift and go to state 11
-
-
-state 16
-
     (10) factor -> VARIABLE LBRACKET expression . RBRACKET
     (1) expression -> expression . PLUS term
     (2) expression -> expression . MINUS term
 
     RBRACKET        shift and go to state 19
-    PLUS            shift and go to state 8
+    PLUS            shift and go to state 10
     MINUS           shift and go to state 9
+
+
+state 15
+
+    (2) expression -> expression MINUS term .
+    (4) term -> term . DIVIDE factor
+    (5) term -> term . TIMES factor
+
+    PLUS            reduce using rule 2 (expression -> expression MINUS term .)
+    MINUS           reduce using rule 2 (expression -> expression MINUS term .)
+    $end            reduce using rule 2 (expression -> expression MINUS term .)
+    RBRACKET        reduce using rule 2 (expression -> expression MINUS term .)
+    RPAREN          reduce using rule 2 (expression -> expression MINUS term .)
+    DIVIDE          shift and go to state 12
+    TIMES           shift and go to state 11
+
+
+state 16
+
+    (1) expression -> expression PLUS term .
+    (4) term -> term . DIVIDE factor
+    (5) term -> term . TIMES factor
+
+    PLUS            reduce using rule 1 (expression -> expression PLUS term .)
+    MINUS           reduce using rule 1 (expression -> expression PLUS term .)
+    $end            reduce using rule 1 (expression -> expression PLUS term .)
+    RBRACKET        reduce using rule 1 (expression -> expression PLUS term .)
+    RPAREN          reduce using rule 1 (expression -> expression PLUS term .)
+    DIVIDE          shift and go to state 12
+    TIMES           shift and go to state 11
 
 
 state 17
 
-    (5) term -> term DIVIDE factor .
+    (5) term -> term TIMES factor .
 
-    TIMES           reduce using rule 5 (term -> term DIVIDE factor .)
-    DIVIDE          reduce using rule 5 (term -> term DIVIDE factor .)
-    RBRACKET        reduce using rule 5 (term -> term DIVIDE factor .)
-    PLUS            reduce using rule 5 (term -> term DIVIDE factor .)
-    MINUS           reduce using rule 5 (term -> term DIVIDE factor .)
-    $end            reduce using rule 5 (term -> term DIVIDE factor .)
-    RPAREN          reduce using rule 5 (term -> term DIVIDE factor .)
+    DIVIDE          reduce using rule 5 (term -> term TIMES factor .)
+    TIMES           reduce using rule 5 (term -> term TIMES factor .)
+    PLUS            reduce using rule 5 (term -> term TIMES factor .)
+    MINUS           reduce using rule 5 (term -> term TIMES factor .)
+    $end            reduce using rule 5 (term -> term TIMES factor .)
+    RPAREN          reduce using rule 5 (term -> term TIMES factor .)
+    RBRACKET        reduce using rule 5 (term -> term TIMES factor .)
 
 
 state 18
 
-    (4) term -> term TIMES factor .
+    (4) term -> term DIVIDE factor .
 
-    TIMES           reduce using rule 4 (term -> term TIMES factor .)
-    DIVIDE          reduce using rule 4 (term -> term TIMES factor .)
-    RBRACKET        reduce using rule 4 (term -> term TIMES factor .)
-    PLUS            reduce using rule 4 (term -> term TIMES factor .)
-    MINUS           reduce using rule 4 (term -> term TIMES factor .)
-    $end            reduce using rule 4 (term -> term TIMES factor .)
-    RPAREN          reduce using rule 4 (term -> term TIMES factor .)
+    DIVIDE          reduce using rule 4 (term -> term DIVIDE factor .)
+    TIMES           reduce using rule 4 (term -> term DIVIDE factor .)
+    PLUS            reduce using rule 4 (term -> term DIVIDE factor .)
+    MINUS           reduce using rule 4 (term -> term DIVIDE factor .)
+    $end            reduce using rule 4 (term -> term DIVIDE factor .)
+    RPAREN          reduce using rule 4 (term -> term DIVIDE factor .)
+    RBRACKET        reduce using rule 4 (term -> term DIVIDE factor .)
 
 
 state 19
 
     (10) factor -> VARIABLE LBRACKET expression RBRACKET .
 
-    TIMES           reduce using rule 10 (factor -> VARIABLE LBRACKET expression RBRACKET .)
     DIVIDE          reduce using rule 10 (factor -> VARIABLE LBRACKET expression RBRACKET .)
+    TIMES           reduce using rule 10 (factor -> VARIABLE LBRACKET expression RBRACKET .)
     PLUS            reduce using rule 10 (factor -> VARIABLE LBRACKET expression RBRACKET .)
     MINUS           reduce using rule 10 (factor -> VARIABLE LBRACKET expression RBRACKET .)
     $end            reduce using rule 10 (factor -> VARIABLE LBRACKET expression RBRACKET .)

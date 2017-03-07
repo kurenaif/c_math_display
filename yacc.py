@@ -17,13 +17,14 @@ def p_expression_term(p):
     'expression : term'
     p[0] = p[1]
 
+def p_term_div(p):
+    'term : term DIVIDE factor'
+    p[0] = "\\frac{" + p[1] + "}"+"{" + p[3] + "}"
+
 def p_term_times(p):
     'term : term TIMES factor'
     p[0] = p[1] + " \\times " + p[3]
 
-def p_term_div(p):
-    'term : term DIVIDE factor'
-    p[0] = "\\frac{" + p[1] + "}"+"{" + p[3] + "}"
 
 def p_term_factor(p):
     'term : factor'
@@ -52,11 +53,12 @@ def p_error(p):
 # Build the parser
 parser = yacc.yacc()
 
-while True:
-   try:
-       s = input('> ')
-   except EOFError:
-       break
-   if not s: continue
-   result = parser.parse(s)
-   print(result)
+if __name__ == '__main__':
+    while True:
+       try:
+           s = input('> ')
+       except EOFError:
+           break
+       if not s: continue
+       result = parser.parse(s)
+       print(result)
